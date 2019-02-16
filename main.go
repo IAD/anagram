@@ -19,7 +19,6 @@ func main() {
 	word := os.Args[2]
 
 	processorNumbers := runtime.NumCPU()
-	fmt.Println("cores:", processorNumbers)
 
 	jobs := make(chan string, 100000)
 	results := make(chan *string, 100000)
@@ -48,7 +47,7 @@ func main() {
 
 	duration := time.Since(started)
 
-	fmt.Printf("%d ms, %s \n", duration.Nanoseconds()/1000/1000, strings.Join(list, ", "))
+	fmt.Printf("%.2f, %s \n", duration.Seconds()*1000, strings.Join(list, ", "))
 }
 
 func readFile(fileName string, jobs chan<- string) error {
@@ -56,8 +55,7 @@ func readFile(fileName string, jobs chan<- string) error {
 
 	file, err := os.Open(fileName)
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		return err
 	}
 	defer file.Close()
 
